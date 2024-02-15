@@ -115,7 +115,7 @@ if wav_audio_data is not None:
                 st.audio("Testing.wav")
 
     except sr.UnknownValueError:
-        st.write("Speech Recognition could not understand audio")
+        
         print("Speech Recognition could not understand audio")
     except sr.RequestError as e:
         print(f"Could not request results from Google Speech Recognition service; {e}")
