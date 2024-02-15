@@ -43,7 +43,7 @@ pillow==10.2.0
 protobuf==4.25.2
 pyarrow==15.0.0
 pyarrow-hotfix==0.6
-PyAudio==0.2.14
+pytthon3-pyaudio
 pycparser==2.21
 pydantic==2.6.1
 pydantic_core==2.16.2
