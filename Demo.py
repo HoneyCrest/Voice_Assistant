@@ -6,11 +6,11 @@ from dotenv import load_dotenv
 import pyaudio
 import wave
 import speech_recognition as sr
-from transformers import pipeline
+# from transformers import pipeline
 import torch
 from datasets import load_dataset
 import soundfile as sf
-
+from transformers import pipeline
 import pyaudio
 
 # p = pyaudio.PyAudio()
@@ -29,77 +29,28 @@ hugging_face_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 st.set_page_config(page_title='🦜🔗 Voice Assistant Demo')
 st.title('🦜🔗 Voice Assistant Demo')
 
-# # Define the parameters for the audio file
-# FORMAT = pyaudio.paInt16
-# CHANNELS = 1
-# RATE = 44100
-# CHUNK = 1024
-# RECORD_SECONDS = 10
-# WAVE_FILE = "sample.wav"
+# from st_audiorec import st_audiorec
+# import streamlit as st
 
-# # Create a pyaudio object
-# audio = pyaudio.PyAudio()
+# wav_audio_data = st_audiorec()
 
-# # Initialize button state in session state
-# if 'button_disabled' not in st.session_state:
-#     st.session_state.button_disabled = True
+# if wav_audio_data is not None:
+#     # Save the audio data as a WAV file
+#     with open("recorded_audio.wav", "wb") as f:
+#         f.write(wav_audio_data)
 
-# st.write(" ")
-# # Start and stop recording buttons in a single line
-# col1, col2 = st.columns([1, 1])
-# with col1:
-#     start_button = st.button('Start Recording')
-# with col2:
-#     stop_button = st.button('Stop Recording')
+# # if wav_audio_data is not None:
+# #     st.audio(wav_audio_data, format='audio/wav')
 
-# submit = st.button('Generate Text')
+#     r = sr.Recognizer()
 
-# st.session_state.is_recording = False
-
-# if start_button:
-#     st.session_state.is_recording = True
-#     # Open a stream to record the audio
-#     stream = audio.open(format=FORMAT, channels=CHANNELS,
-#                         rate=RATE, input=True,
-#                         frames_per_buffer=CHUNK)
-#     st.session_state.stream = stream
-#     st.session_state.frames = []
-#     st.success("Recording started")
-
-# if stop_button:
-#     st.session_state.is_recording = False
-#     if 'stream' in st.session_state:
-#         # Stop recording
-#         st.session_state.stream.stop_stream()
-#         st.session_state.stream.close()
-        
-#         # Terminate the pyaudio object
-#         audio.terminate()
-
-#         # Save the audio frames as a wave file
-#         with wave.open(WAVE_FILE, 'wb') as wf:
-#             wf.setnchannels(CHANNELS)
-#             wf.setsampwidth(audio.get_sample_size(FORMAT))
-#             wf.setframerate(RATE)
-#             wf.writeframes(b''.join(st.session_state.frames))
-        
-#         st.success(f"Recording stopped amd Audio saved.")
-
-# # Recording logic
-# while st.session_state.is_recording:
-#     if 'stream' in st.session_state:
-#         data = st.session_state.stream.read(CHUNK)
-#         st.session_state.frames.append(data)
-
-# if stop_button:
-    # audio_file= open("sample.wav", "rb")
-    # transcript = client.audio.translations.create(
-    # model="whisper-1", 
-    # file=audio_file
-    # )
-from st_audiorec import st_audiorec
-import streamlit as st
-
+#     # open the file
+#     with sr.AudioFile("recorded_audio.wav") as source:
+#         # listen for the data (load audio to memory)
+#         audio_data = r.record(source)
+#         # recognize (convert from speech to text)
+#         text = r.recognize_google(audio_data)
+#         print(text)
 wav_audio_data = st_audiorec()
 
 if wav_audio_data is not None:
@@ -107,23 +58,29 @@ if wav_audio_data is not None:
     with open("recorded_audio.wav", "wb") as f:
         f.write(wav_audio_data)
 
-# if wav_audio_data is not None:
-#     st.audio(wav_audio_data, format='audio/wav')
+    try:
+        r = sr.Recognizer()
 
-    r = sr.Recognizer()
+        # open the file
+        with sr.AudioFile("recorded_audio.wav") as source:
+            # listen for the data (load audio to memory)
+            audio_data = r.record(source)
+            # recognize (convert from speech to text)
+            text = r.recognize_google(audio_data)
+            print(text)
+    except sr.UnknownValueError:
+        print("Speech Recognition could not understand audio")
+    except sr.RequestError as e:
+        print(f"Could not request results from Google Speech Recognition service; {e}")
+    except Exception as e:
+        print(f"An error occurred: {e}")
 
-    # open the file
-    with sr.AudioFile("recorded_audio.wav") as source:
-        # listen for the data (load audio to memory)
-        audio_data = r.record(source)
-        # recognize (convert from speech to text)
-        text = r.recognize_google(audio_data)
-        print(text)
 
     transcript_data = text
     st.session_state.transcript_data = transcript_data
     st.header('Text generated of your speech :')
     st.success(st.session_state.transcript_data) 
+
     
   
 submit = st.button('Generate text')
@@ -149,17 +106,15 @@ if submit :
             
         })
 
-        # if 'error' in output :
-        #     output = query({
-        #     "inputs": f"Provide the answer in 2 to 3 lines: {st.session_state.transcript_data}" })
-        
-        # print(output)
-
-        # output_data = output[0]['generated_text'].split('\n', 1)[1]
-        # print(output_data)
         if 'error' in output:
             # Handle the error here
             print(f"An error occurred: {output['error']}")
+            output = query({
+            "inputs": input,
+            
+        })
+            output_data = output[0]['generated_text'].split('\n', 1)[1]
+            print(output_data)
         else:
             output_data = output[0]['generated_text'].split('\n', 1)[1]
             print(output_data)
