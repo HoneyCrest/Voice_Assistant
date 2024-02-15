@@ -9,6 +9,7 @@ import speech_recognition as sr
 
 load_dotenv()
 
+hugging_face_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 
 # Page title
 st.set_page_config(page_title='🦜🔗 Voice Assistant Demo')
@@ -30,7 +31,6 @@ if 'button_disabled' not in st.session_state:
     st.session_state.button_disabled = True
 
 st.write(" ")
-
 # Start and stop recording buttons in a single line
 col1, col2 = st.columns([1, 1])
 with col1:
@@ -38,7 +38,7 @@ with col1:
 with col2:
     stop_button = st.button('Stop Recording')
 
-
+submit = st.button('Generate Text')
 
 st.session_state.is_recording = False
 
@@ -69,7 +69,7 @@ if stop_button:
             wf.setframerate(RATE)
             wf.writeframes(b''.join(st.session_state.frames))
         
-        st.success(f"Recording stopped. Audio saved as '{WAVE_FILE}'")
+        st.success(f"Recording stopped amd Audio saved.")
 
 # Recording logic
 while st.session_state.is_recording:
@@ -100,7 +100,7 @@ if stop_button:
     st.success(st.session_state.transcript_data) 
     
   
-submit = st.button('Generate Text')
+
 
 if submit :
     
@@ -109,7 +109,7 @@ if submit :
         import requests
 
         API_URL = "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct"
-        headers = {"Authorization": f"Bearer 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"}
+        headers = {"Authorization": f"Bearer {hugging_face_token}"}
 
         def query(payload):
             response = requests.post(API_URL, headers=headers, json=payload)
@@ -131,7 +131,6 @@ if submit :
 
         # output_data = output[0]['generated_text'].split('\n', 1)[1]
         # print(output_data)
-
         if 'error' in output:
             # Handle the error here
             print(f"An error occurred: {output['error']}")
