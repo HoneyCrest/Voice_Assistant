@@ -12,6 +12,10 @@ from datasets import load_dataset
 import soundfile as sf
 from transformers import pipeline
 import pyaudio
+from st_audiorec import st_audiorec
+import streamlit as st
+
+
 
 # p = pyaudio.PyAudio()
 # info = p.get_host_api_info_by_index(0)
@@ -29,34 +33,16 @@ hugging_face_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 st.set_page_config(page_title='🦜🔗 Voice Assistant Demo')
 st.title('🦜🔗 Voice Assistant Demo')
 
-from st_audiorec import st_audiorec
-import streamlit as st
 
-# wav_audio_data = st_audiorec()
-
-# if wav_audio_data is not None:
-#     # Save the audio data as a WAV file
-#     with open("recorded_audio.wav", "wb") as f:
-#         f.write(wav_audio_data)
-
-# # if wav_audio_data is not None:
-# #     st.audio(wav_audio_data, format='audio/wav')
-
-#     r = sr.Recognizer()
-
-#     # open the file
-#     with sr.AudioFile("recorded_audio.wav") as source:
-#         # listen for the data (load audio to memory)
-#         audio_data = r.record(source)
-#         # recognize (convert from speech to text)
-#         text = r.recognize_google(audio_data)
-#         print(text)
 wav_audio_data = st_audiorec()
 
 if wav_audio_data is not None:
+    with open("recorded_audio.wav", "wb") as f:
+        f.write(wav_audio_data)
     # Save the audio data as a WAV file
     with open("recorded_audio.wav", "wb") as f:
         f.write(wav_audio_data)
+        
 
     try:
         r = sr.Recognizer()
@@ -127,7 +113,9 @@ if wav_audio_data is not None:
                 sf.write("Testing.wav", speech["audio"], samplerate=speech["sampling_rate"])
 
                 st.audio("Testing.wav")
+
     except sr.UnknownValueError:
+        st.write("Speech Recognition could not understand audio")
         print("Speech Recognition could not understand audio")
     except sr.RequestError as e:
         print(f"Could not request results from Google Speech Recognition service; {e}")
