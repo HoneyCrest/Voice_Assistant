@@ -57,8 +57,7 @@ if start_button:
     # Open a stream to record the audio
     stream = audio.open(format=FORMAT, channels=CHANNELS,
                         rate=RATE, input=True,
-                        frames_per_buffer=CHUNK,
-                        input_device_index=0)
+                        frames_per_buffer=CHUNK)
     st.session_state.stream = stream
     st.session_state.frames = []
     st.success("Recording started")
