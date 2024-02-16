@@ -52,7 +52,7 @@ seconds = 10  # Duration of recording (changed to 10 seconds)
 
 record = st.button("Start Record")
 if record :
-    device_index = 1
+    device_index = 4
     myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2,device=device_index)
     sd.wait()  # Wait until recording is finished
     write('voice_output.wav', fs, myrecording)  # Save as WAV file
