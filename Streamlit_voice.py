@@ -51,8 +51,8 @@ try:
             text = r.recognize_google(audio_data)
             print(text)
 
-            # Delete the record.wav file
-            os.remove("record.wav")
+            # # Delete the record.wav file
+            # os.remove("record.wav")
     
 
 
@@ -76,7 +76,7 @@ try:
                 response = requests.post(API_URL, headers=headers, json=payload)
                 return response.json()
             
-            input = f"Provide the answer in 2 to 3 lines: {st.session_state.transcript_data}"
+            input = f"Provide the answer in 2 to 3 lines: {transcript_data}"
             print("INPUT : ",input)
                     
             output = query({
