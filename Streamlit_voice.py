@@ -50,12 +50,15 @@ try:
             # recognize (convert from speech to text)
             text = r.recognize_google(audio_data)
             print(text)
+
+            # Delete the record.wav file
+            os.remove("record.wav")
     
 
 
         transcript_data = text
         st.session_state.transcript_data = transcript_data
-        st.spinner(text = 'Getting the response')
+        st.spinner('Getting the response')
         # st.header('Text generated of your speech :')
         # st.success(st.session_state.transcript_data) 
 
@@ -117,7 +120,7 @@ try:
                 status = sd.wait() 
 
                 # # Use HTML audio tags to autoplay the audio
-                # st.audio('Testing.wav')
+                st.audio('Testing.wav')
 
                 # Delete the record.wav file
                 os.remove("record.wav")
