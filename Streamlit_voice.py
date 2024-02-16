@@ -55,7 +55,7 @@ try:
 
         transcript_data = text
         st.session_state.transcript_data = transcript_data
-        st.spinner('Getting the response')
+        st.spinner(text = 'Getting the response')
         # st.header('Text generated of your speech :')
         # st.success(st.session_state.transcript_data) 
 
@@ -107,7 +107,17 @@ try:
 
                 sf.write("Testing.wav", speech["audio"], samplerate=speech["sampling_rate"])
 
-                st.audio("Testing.wav")
+                import sounddevice as sd
+                import soundfile as sf
+
+                filename = 'Testing.wav'
+                # Extract data and sampling rate from file
+                data, fs = sf.read(filename, dtype='float32')  
+                sd.play(data, fs)
+                status = sd.wait() 
+
+                # # Use HTML audio tags to autoplay the audio
+                # st.audio('Testing.wav')
 
                 # Delete the record.wav file
                 os.remove("record.wav")
