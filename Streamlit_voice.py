@@ -110,6 +110,9 @@ try:
 
                 sf.write("Testing.wav", speech["audio"], samplerate=speech["sampling_rate"])
 
+                # # Use HTML audio tags to autoplay the audio
+                st.audio('Testing.wav')
+
                 import sounddevice as sd
                 import soundfile as sf
 
