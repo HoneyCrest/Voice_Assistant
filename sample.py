@@ -48,9 +48,12 @@ print(sd.query_devices())
 fs = 44100  # Sample rate
 seconds = 10  # Duration of recording (changed to 10 seconds)
 
+ 
+
 record = st.button("Start Record")
 if record :
-    myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2)
+    device_index = 1
+    myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2,device=device_index)
     sd.wait()  # Wait until recording is finished
     write('voice_output.wav', fs, myrecording)  # Save as WAV file
     # Convert the NumPy array to audio file
