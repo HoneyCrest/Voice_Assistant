@@ -40,8 +40,7 @@ st.title('🦜🔗 Voice Assistant Demo')
 import sounddevice as sd
 from scipy.io.wavfile import write
 
-# Print information about available input devices
-print(sd.query_devices())
+
 
 
 
@@ -50,10 +49,11 @@ seconds = 10  # Duration of recording (changed to 10 seconds)
 
  
 
-record = st.button("Start Record")
+record = st.button("🎙️")
+
 if record :
     device_index = 4
-    myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2,device=device_index)
+    myrecording = sd.rec(int(seconds * fs), samplerate=fs, channels=2,)
     sd.wait()  # Wait until recording is finished
     write('voice_output.wav', fs, myrecording)  # Save as WAV file
     # Convert the NumPy array to audio file
@@ -127,6 +127,14 @@ if record :
             sf.write("Testing.wav", speech["audio"], samplerate=speech["sampling_rate"])
 
             st.audio("Testing.wav")
+            import sounddevice as sd
+            import soundfile as sf
+
+            filename = 'Testing.wav'
+            # Extract data and sampling rate from file
+            data, fs = sf.read(filename, dtype='float32')  
+            sd.play(data, fs)
+            status = sd.wait() 
 
     except sr.UnknownValueError:
         
