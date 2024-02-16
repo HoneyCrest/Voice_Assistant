@@ -36,6 +36,7 @@ hugging_face_token = os.getenv('HUGGINGFACEHUB_API_TOKEN')
 st.set_page_config(page_title='🦜🔗 Voice Assistant Demo')
 st.title('🦜🔗 Voice Assistant Demo')
 
+print(sd.query_devices())
 
 import sounddevice as sd
 from scipy.io.wavfile import write
